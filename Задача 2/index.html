@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <style>
+        .promo {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .promo-input,
+        .promo-button {
+            padding: 10px;
+            border-radius: 10px;
+            border: solid 1px gray;
+        }
+
+        .promo-button {
+            background-color: lightskyblue;
+            border: none;
+            height: max-content;
+        }
+
+        p {
+            margin: 0;
+            font: 700 11px/1.2 sans-serif;
+            color: green;
+        }
+    </style>
+
+    <form class="promo">
+        <div class="promo-info">
+            <input class="promo-input" type="text" placeholder="ПРОМОКОД">
+            <button class="promo-button" type="submit">Применить</button>
+        </div>
+        <p class="message"></p>
+
+    </form>
+
+    <script>
+        const promocodeObj = {
+            promocode: "PROM50",
+            gift: "Скидка 50%"
+        }
+        const promoBlock = document.querySelector('.promo');
+
+        promoBlock.addEventListener("submit", function (e) {
+            e.preventDefault()
+            const promo = document.querySelector('.promo-input').value;
+            const message = document.querySelector('.message');
+            if (promo === promocodeObj['promocode']) {
+
+                const messageText = 'Промокод применён. ' + promocodeObj['gift']
+                message.textContent = messageText
+
+                document.cookie = `${promo}=${messageText}`
+            } else {
+                message.textContent = ''
+            }
+        })
+
+        function getCookie() {
+            return document.cookie.split('; ').reduce((acc, item) => {
+                const [name, value] = item.split('=')
+                acc[name] = value
+                return acc
+            }, {})
+        }
+        const cookie = getCookie()
+        console.log(cookie);
+
+        if (cookie) {
+            const input = document.querySelector('.promo-input');
+            const message = document.querySelector('.message');
+            const keys = Object.keys(cookie);
+
+            input.value = keys[keys.length - 1]
+            message.textContent = cookie[input.value];
+
+        }
+        
+
+    </script>
+</body>
+
+</html>
